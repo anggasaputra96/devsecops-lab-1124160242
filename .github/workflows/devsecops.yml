@@ -8,23 +8,23 @@ on:
 
 jobs:
   sast_scan:
-      name: Run SAST Scan (Semgrep)
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout Source Code
-          uses: actions/checkout@v4
+    name: Run SAST Scan (Semgrep)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
 
-        - name: Run Semgrep SAST
-          uses: semgrep/semgrep-action@v1
-          with:
-            config: p/ci
+      - name: Run Semgrep SAST
+        uses: semgrep/action@v1
+        with:
+          config: p/default
 
   sca_scan:
     name: Run SCA Dependency Scan (Trivy)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Run Trivy Vulnerability Scanner
         uses: aquasecurity/trivy-action@master
@@ -32,4 +32,4 @@ jobs:
           scan-type: 'fs'
           scan-ref: '.'
           severity: 'HIGH, CRITICAL'
-          exit-code: '1' # Memaksa pipeline berstatus GAGAL jika ada celah High/Critical
+          exit-code: '1'
