@@ -2,15 +2,17 @@ const express = require('express');
 const mysql = require('mysql');
 const app = express();
 
-// VULNERABILITY 1: Hardcoded Secret (Menggunakan format Generic API Key 32-karakter)
+// VULNERABILITY 1: Hardcoded Secret
 const API_KEY = "1234567890abcdef1234567890abcdef";
 
-// VULNERABILITY 2: SQL Injection (Injeksi langsung tanpa filter)
-const db = mysql.createConnection({ host: 'localhost', user: 'root', password: 'password123' });
+// VULNERABILITY 2: SQL Injection
+const connection = mysql.createConnection({ host: 'localhost', user: 'root', password: 'password' });
 
 app.get('/users', (req, res) => {
-    db.query("SELECT * FROM users WHERE id = " + req.query.id, (err, result) => {
-        res.send(result);
+    // Penulisan query dipisah agar Semgrep mendeteksi perpindahan data kotor (tainted data)
+    const q = "SELECT * FROM users WHERE id = '" + req.query.id + "'";
+    connection.query(q, (error, results) => {
+        res.send(results);
     });
 });
 
