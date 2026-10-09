@@ -17,8 +17,8 @@ jobs:
       - name: Run Semgrep SAST
         run: |
           pipx install semgrep
-          semgrep scan --config p/default || true
-
+          semgrep scan --config p/javascript --config p/secrets || true
+          
   sca_scan:
     name: Run SCA Dependency Scan (Trivy)
     runs-on: ubuntu-latest
